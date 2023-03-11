@@ -1,4 +1,5 @@
 import axios from "axios"
+import { AppDispatch } from "./store"
 import * as types from "./types"
 const apiUrl = "http://localhost:3001/your-entity"
 

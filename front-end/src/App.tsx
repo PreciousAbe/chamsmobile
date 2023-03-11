@@ -1,17 +1,21 @@
 import { useEffect } from "react"
 import { RootState } from './redux/store'
 import { useDispatch, useSelector } from "react-redux"
+import { addTodos, getTodos, removeTodo } from "./redux/actions"
 
-const App = () => {
+
+const TodosTable= () => {
   const dispatch = useDispatch()
-  const loading = useSelector((state: RootState) => state.todo.loading)
+  const loading = useSelector((state: RootState) => state?.todos?.loading)
+  const todos = useSelector((state: RootState) => state?.todos?.data)
+  console.log({todos})
 
   useEffect(() => {
-    dispatch(YourEntityActions.fetchAll())
+    dispatch(getTodos() as any)
   }, [dispatch])
 
   const handleDelete = (id: number) => {
-    dispatch(YourEntityActions.remove(id))
+    dispatch(removeTodo(id) as any)
   }
 
   return (
@@ -25,7 +29,7 @@ const App = () => {
         </tr>
       </thead>
       <tbody>
-        {yourEntities.map((yourEntity) => (
+        {todos.length > 0 && todos?.map((yourEntity) => (
           <tr key={yourEntity.id}>
             <td>{yourEntity.id}</td>
             <td>{yourEntity.name}</td>
@@ -54,23 +58,23 @@ const YourEntityForm = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const yourEntity: YourEntity = {
+    const yourEntity = {
       id: 0,
       name: formData.get("name") as string,
       description: formData.get("description") as string,
     }
-    dispatch(YourEntityActions.create(yourEntity))
+    dispatch(addTodos(yourEntity) as any)
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="name">Name:</label>
-        <input type="text" name="name" required />
+        <input placeholder='name' type="text" name="name" required />
       </div>
       <div>
         <label htmlFor="description">Description:</label>
-        <textarea name="description" required />
+        <textarea placeholder='description' name="description" required />
       </div>
       <div>
         <button type="submit">Add</button>
@@ -79,17 +83,17 @@ const YourEntityForm = () => {
   )
 }
 
-const YourEntityPage = () => {
+const App = () => {
   const dispatch = useDispatch()
 
   const handleRefresh = () => {
-    dispatch(YourEntityActions.fetchAll())
+    dispatch(getTodos() as any)
   }
 
   return (
     <div>
       <h1>Your Entity</h1>
-      <YourEntityTable />
+      <TodosTable />
       <YourEntityForm />
       <button onClick={handleRefresh}>Refresh</button>
     </div>
