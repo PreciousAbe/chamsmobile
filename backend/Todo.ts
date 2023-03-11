@@ -9,5 +9,5 @@ export class TodoEntity {
   name: string;
 
   @Column()
-  age: number;
+  description: string;
 }
