@@ -34,7 +34,10 @@ export class TodoController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() todo: TodoEntity): Promise<TodoEntity> {
+  async update(
+    @Param('id') id: number,
+    @Body() todo: TodoEntity,
+  ): Promise<TodoEntity> {
     todo.id = id;
     return await this.todoRepository.save(todo);
   }
